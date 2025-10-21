@@ -1,0 +1,48 @@
+{
+  "name": "antpitlab-next",
+  "version": "1.0.0",
+  "description": "AntPit Lab - Portfolio fotografico professionale con Next.js 15",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky"
+  },
+  "keywords": [
+    "nextjs",
+    "portfolio",
+    "photography",
+    "typescript",
+    "tailwindcss"
+  ],
+  "author": "Antonio Pitocco",
+  "license": "MIT",
+  "dependencies": {
+    "next": "^15.5.6",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@types/node": "^24.9.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.38.0",
+    "eslint-config-next": "^15.5.6",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.5",
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.1",
+    "tailwindcss": "^4.1.15",
+    "typescript": "^5.9.3"
+  }
+}
