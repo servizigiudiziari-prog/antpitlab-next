@@ -118,6 +118,8 @@ export function observeLCP(callback?: (entry: PerformanceEntry) => void) {
       const entries = list.getEntries()
       const lastEntry = entries[entries.length - 1]
 
+      if (!lastEntry) return
+
       if (process.env.NODE_ENV === 'development') {
         console.log('[LCP Element]:', {
           element: (lastEntry as any).element,
