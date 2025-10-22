@@ -227,7 +227,8 @@ export async function checkImageOptimization(url: string): Promise<{
     const recommendations: string[] = []
 
     // Check size (thumbnail < 100KB, full < 500KB)
-    const isThreshold = url.includes('w=') && parseInt(url.split('w=')[1]) < 600
+    const widthParam = url.split('w=')[1]
+    const isThreshold = widthParam ? parseInt(widthParam) < 600 : false
     const maxSize = isThreshold ? 100 : 500
 
     if (size > maxSize) {
