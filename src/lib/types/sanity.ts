@@ -1,5 +1,4 @@
 import type { PortableTextBlock } from '@portabletext/types'
-import type { Image as SanityImageType } from 'sanity'
 
 /**
  * TypeScript types per i documenti Sanity
@@ -10,7 +9,7 @@ import type { Image as SanityImageType } from 'sanity'
 // BASE TYPES
 // ============================================
 
-export interface SanityImage extends SanityImageType {
+export interface SanityImage {
   asset: {
     _id: string
     url: string
