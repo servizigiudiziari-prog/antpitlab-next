@@ -55,3 +55,8 @@ lerna-debug.log*
 
 # OS
 Thumbs.db
+
+# Performance Reports
+/reports
+/.lighthouseci
+.next/analyze

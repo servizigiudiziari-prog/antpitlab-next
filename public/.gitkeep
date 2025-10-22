@@ -1,0 +1,43 @@
+# Public Assets for AntPit Lab Portfolio
+
+This directory contains static assets served at the root level:
+
+- `favicon.ico` - Browser favicon (32x32 or 16x16)
+- `og-image.jpg` - Open Graph image for social sharing (1200x630px, <1MB)
+- `icon.png` - App icon for PWA (192x192, 512x512)
+- `apple-icon.png` - Apple touch icon (180x180)
+
+## OG Image Guidelines
+
+The Open Graph image (`og-image.jpg`) should be:
+- Dimensions: 1200x630 pixels (Facebook/LinkedIn recommended)
+- Format: JPG or PNG
+- File size: < 1MB for fast loading
+- Content: Logo + key visual + tagline
+- Safe zone: Keep important content within 1200x600 to avoid cropping
+
+## Favicon Guidelines
+
+For best browser support, provide:
+1. `favicon.ico` (32x32, legacy)
+2. `icon.png` (192x192 and 512x512 for modern browsers)
+3. `apple-icon.png` (180x180 for iOS devices)
+
+Next.js will automatically use these files from the app directory if present.
+
+## TODO
+
+1. Create custom OG image with:
+   - AntPit Lab logo
+   - Photography sample
+   - Tagline: "Portfolio Fotografico Professionale"
+
+2. Generate favicon set from logo:
+   ```bash
+   # Use a tool like realfavicongenerator.net or generate manually
+   ```
+
+3. Test social previews:
+   - Facebook Debugger: https://developers.facebook.com/tools/debug/
+   - Twitter Card Validator: https://cards-dev.twitter.com/validator
+   - LinkedIn Post Inspector: https://www.linkedin.com/post-inspector/

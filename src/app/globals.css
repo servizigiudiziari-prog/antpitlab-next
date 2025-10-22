@@ -11,12 +11,27 @@
   --border: #1a1a1a;
   --accent: #3b82f6;
   --overlay: rgba(0, 0, 0, 0.7);
+
+  /* Animation timing variables */
+  --timing-fast: 0.2s;
+  --timing-medium: 0.35s;
+  --timing-slow: 0.6s;
+
+  /* Easing functions */
+  --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-in: cubic-bezier(0.42, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -26,6 +41,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Prevent horizontal scroll on animations */
+  overflow-x: hidden;
 }
 
 h1,
@@ -39,8 +56,242 @@ h6 {
   line-height: 1.2;
 }
 
+/* ========================================
+   ANIMATIONS & KEYFRAMES
+   ======================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Skeleton loader animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY: REDUCED MOTION
+   ======================================== */
+
+/*
+  Respect user's motion preferences
+  Disable all animations for users with vestibular disorders
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Framer Motion specific */
+  [data-framer-motion] {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Animation utility classes */
+  .animate-fade-in {
+    animation: fadeIn var(--timing-medium) var(--ease-out);
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp var(--timing-medium) var(--ease-out);
+  }
+
+  .animate-fade-in-down {
+    animation: fadeInDown var(--timing-medium) var(--ease-out);
+  }
+
+  .animate-slide-up {
+    animation: slideUp var(--timing-medium) var(--ease-out);
+  }
+
+  .animate-scale-in {
+    animation: scaleIn var(--timing-medium) var(--ease-out);
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite linear;
+  }
+
+  /* Delay utilities */
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  .delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  .delay-500 {
+    animation-delay: 0.5s;
+  }
+
+  /* GPU acceleration hint */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+
+  /* Remove will-change after animation */
+  .will-change-auto {
+    will-change: auto;
+  }
+}
+
+/* ========================================
+   COMPONENT STYLES
+   ======================================== */
+
+@layer components {
+  /* Smooth hover transitions for interactive elements */
+  .hover-lift {
+    transition: transform var(--timing-fast) var(--ease-out),
+                box-shadow var(--timing-fast) var(--ease-out);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Smooth scale effect */
+  .hover-scale {
+    transition: transform var(--timing-fast) var(--ease-out);
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+
+  /* Fade overlay */
+  .overlay-fade {
+    transition: opacity var(--timing-medium) var(--ease-in-out);
+  }
+
+  /* Loading skeleton */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--bg-secondary) 0%,
+      var(--border) 50%,
+      var(--bg-secondary) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/*
+  Force GPU acceleration for frequently animated elements
+  Only apply to elements that actually animate
+*/
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize image rendering */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Contain layout shifts */
+.contain-layout {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
 }

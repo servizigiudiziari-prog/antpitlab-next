@@ -34,6 +34,9 @@ const config: Config = {
         "96": "6rem",
         "128": "8rem",
       },
+      borderWidth: {
+        "3": "3px",
+      },
     },
   },
   plugins: [],
