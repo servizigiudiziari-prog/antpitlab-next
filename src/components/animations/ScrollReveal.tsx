@@ -50,7 +50,7 @@ export function ScrollReveal({
   const ref = useRef(null);
   const isInView = useInView(ref, {
     once,
-    margin,
+    margin: margin as any,
   });
 
   const getInitialState = () => {
