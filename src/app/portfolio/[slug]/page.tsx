@@ -5,6 +5,7 @@ import Link from "next/link";
 import { client } from "@/lib/sanity/client";
 import { PROJECT_BY_SLUG_QUERY, ALL_PROJECT_SLUGS_QUERY } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/imageBuilder";
+import type { SanityImage } from "@/lib/types/sanity";
 import {
   generatePhotographSchema,
   generateImageGallerySchema,
@@ -293,7 +294,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <section className="mb-12">
               <h2 className="mb-6 text-2xl font-bold">Galleria</h2>
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {project.gallery.map((image, index) => (
+                {project.gallery.map((image: SanityImage, index: number) => (
                   <figure key={index}>
                     <img
                       src={urlFor(image).width(800).quality(85).url()}
