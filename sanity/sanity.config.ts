@@ -40,7 +40,7 @@ const structure = (S: any) =>
       S.divider(),
 
       // Tutti gli altri documenti (fallback)
-      ...S.documentTypeListItems().filter(
+      ...(S.documentTypeListItems() || []).filter(
         (listItem: any) => !["settings", "project", "category"].includes(listItem.getId())
       ),
     ]);
