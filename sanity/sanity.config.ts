@@ -37,12 +37,6 @@ const structure = (S: any) =>
             .defaultOrdering([{ field: "order", direction: "asc" }])
         ),
 
-      S.divider(),
-
-      // Tutti gli altri documenti (fallback)
-      ...(S.documentTypeListItems() || []).filter(
-        (listItem: any) => !["settings", "project", "category"].includes(listItem.getId())
-      ),
     ]);
 
 export default defineConfig({
