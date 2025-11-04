@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
+
+  body {
+    @apply font-cosmic bg-cosmic-void text-cosmic-light antialiased;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  canvas {
+    display: block;
+  }
+}
+
+@layer utilities {
+  .glow {
+    text-shadow: 0 0 20px rgba(184, 193, 217, 0.5);
+  }
+
+  .glow-strong {
+    text-shadow: 0 0 30px rgba(184, 193, 217, 0.8);
+  }
+}

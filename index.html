@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portale Cosmico</title>
+  <meta name="description" content="Un attraversamento esperienziale — portale multidimensionale">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="overflow-hidden">
+  <!-- Canvas Three.js (renderizzato sotto l'UI) -->
+  <canvas id="portal-canvas" class="fixed inset-0 w-full h-full"></canvas>
+
+  <!-- UI Layer -->
+  <div id="ui-layer" class="fixed inset-0 pointer-events-none">
+    <!-- Portale: Monolite -->
+    <div id="portal-ui" class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-1000">
+      <div class="text-center pointer-events-auto">
+        <p class="text-cosmic-frost text-lg tracking-widest animate-pulse cursor-pointer" id="portal-cta">
+          avvicinati
+        </p>
+      </div>
+    </div>
+
+    <!-- Hub: Costellazione -->
+    <div id="hub-ui" class="absolute inset-0 hidden opacity-0 transition-opacity duration-1000">
+      <!-- Le etichette delle sfere verranno inserite dinamicamente -->
+    </div>
+
+    <!-- Sale: Dimensioni -->
+    <div id="room-ui" class="absolute inset-0 hidden opacity-0 transition-opacity duration-500">
+      <div class="flex items-center justify-center h-full p-8">
+        <div class="relative w-full max-w-5xl h-4/5 bg-gradient-to-br from-cosmic-deep to-cosmic-twilight rounded-lg shadow-2xl overflow-hidden">
+          <!-- Room content -->
+          <div id="room-content" class="relative h-full flex flex-col justify-between p-12 text-cosmic-frost">
+            <div class="flex-1 flex flex-col justify-center">
+              <h1 id="room-title" class="text-5xl font-light mb-6 tracking-wide"></h1>
+              <p id="room-description" class="text-xl leading-relaxed opacity-80 max-w-2xl"></p>
+            </div>
+
+            <!-- Immagine placeholder -->
+            <div id="room-image" class="mt-8 w-full h-64 bg-cosmic-steel/20 rounded flex items-center justify-center">
+              <span class="text-cosmic-steel">[ visuale in arrivo ]</span>
+            </div>
+          </div>
+
+          <!-- Navigazione -->
+          <button id="room-prev" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-cosmic-steel/30 hover:bg-cosmic-steel/50 rounded-full flex items-center justify-center transition-all pointer-events-auto">
+            <span class="text-cosmic-light text-2xl">←</span>
+          </button>
+          <button id="room-next" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-cosmic-steel/30 hover:bg-cosmic-steel/50 rounded-full flex items-center justify-center transition-all pointer-events-auto">
+            <span class="text-cosmic-light text-2xl">→</span>
+          </button>
+
+          <!-- Torna alla costellazione -->
+          <button id="back-to-hub" class="absolute top-6 left-6 px-6 py-3 bg-cosmic-void/50 hover:bg-cosmic-void/70 text-cosmic-frost rounded border border-cosmic-steel/30 transition-all pointer-events-auto">
+            ← Costellazione
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
