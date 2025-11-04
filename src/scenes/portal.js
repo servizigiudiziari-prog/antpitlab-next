@@ -6,6 +6,7 @@
 import * as THREE from 'three';
 import { COLORS, MONOLITH_RATIO, ANIMATION, CAMERA } from '../utils/constants.js';
 import { createComposer, resizeComposer } from '../utils/postprocessing.js';
+import { createStarfield, animateStarfield } from '../utils/starfield.js';
 
 export class PortalScene {
   constructor(canvas, onEnter) {
@@ -27,6 +28,7 @@ export class PortalScene {
 
     this.composer = null;
     this.monolith = null;
+    this.starfield = null;
     this.time = 0;
     this.isAnimating = false;
 
@@ -42,6 +44,10 @@ export class PortalScene {
     // Setup camera
     this.camera.position.set(CAMERA.position.x, CAMERA.position.y, CAMERA.position.z);
     this.camera.lookAt(0, 0, 0);
+
+    // Creare campo stellare (via lattea)
+    this.starfield = createStarfield(5000);
+    this.scene.add(this.starfield);
 
     // Creare il monolite
     this.createMonolith();
@@ -146,10 +152,15 @@ export class PortalScene {
 
   render() {
     if (!this.isAnimating) {
-      // Oscillazione impercettibile
+      // Oscillazione impercettibile del monolite
       this.time += ANIMATION.monolithOscillation;
       this.monolith.rotation.y = Math.sin(this.time) * 0.01;
       this.monolith.position.y = Math.sin(this.time * 2) * 0.02;
+    }
+
+    // Animazione campo stellare (rotazione lenta)
+    if (this.starfield) {
+      animateStarfield(this.starfield, 1);
     }
 
     this.composer.render();

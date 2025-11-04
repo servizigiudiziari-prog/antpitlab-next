@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { COLORS, SPHERE_COLORS, ANIMATION, CAMERA } from '../utils/constants.js';
 import { DIMENSIONS } from '../data/dimensions.js';
 import { createComposer, resizeComposer } from '../utils/postprocessing.js';
+import { createStarfield, animateStarfield } from '../utils/starfield.js';
 
 export class HubScene {
   constructor(canvas, onDimensionSelect) {
@@ -28,6 +29,7 @@ export class HubScene {
 
     this.composer = null;
     this.spheres = [];
+    this.starfield = null;
     this.time = 0;
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
@@ -45,6 +47,10 @@ export class HubScene {
     // Setup camera
     this.camera.position.set(CAMERA.position.x, CAMERA.position.y, CAMERA.position.z);
     this.camera.lookAt(0, 0, 0);
+
+    // Creare campo stellare (via lattea)
+    this.starfield = createStarfield(5000);
+    this.scene.add(this.starfield);
 
     // Creare le 7 sfere
     this.createConstellation();
@@ -210,6 +216,11 @@ export class HubScene {
       sphere.position.y += Math.sin(this.time + offset) * 0.001;
       sphere.rotation.y += 0.002;
     });
+
+    // Animazione campo stellare (rotazione lenta)
+    if (this.starfield) {
+      animateStarfield(this.starfield, 1);
+    }
 
     this.composer.render();
   }
