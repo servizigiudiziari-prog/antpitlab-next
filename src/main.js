@@ -51,7 +51,11 @@ class CosmicPortal {
 
     // Inizializza hub
     this.currentScene = 'hub';
-    this.hubScene = new HubScene(this.canvas, (dimension) => this.enterRoom(dimension));
+    this.hubScene = new HubScene(
+      this.canvas,
+      (dimension) => this.enterRoom(dimension),
+      () => this.backToPortal()
+    );
   }
 
   enterRoom(dimension) {
@@ -82,6 +86,32 @@ class CosmicPortal {
     if (this.hubScene) {
       this.hubScene.reset();
     }
+  }
+
+  backToPortal() {
+    // Pulisci hub
+    if (this.hubScene) {
+      this.hubScene.dispose();
+      this.hubScene = null;
+    }
+
+    // Nascondi UI hub
+    const hubUI = document.getElementById('hub-ui');
+    hubUI.classList.add('hidden');
+    hubUI.style.opacity = '0';
+
+    // Ricrea il portale
+    this.currentScene = 'portal';
+    this.portalScene = new PortalScene(this.canvas, () => this.enterHub());
+
+    // Mostra UI portale con fade in
+    setTimeout(() => {
+      const portalUI = document.getElementById('portal-ui');
+      portalUI.classList.remove('hidden');
+      setTimeout(() => {
+        portalUI.style.opacity = '1';
+      }, 100);
+    }, 500);
   }
 }
 

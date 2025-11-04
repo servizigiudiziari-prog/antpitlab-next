@@ -8,11 +8,13 @@ import { COLORS, SPHERE_COLORS, ANIMATION, CAMERA } from '../utils/constants.js'
 import { DIMENSIONS } from '../data/dimensions.js';
 import { createComposer, resizeComposer } from '../utils/postprocessing.js';
 import { createStarfield, animateStarfield } from '../utils/starfield.js';
+import { createSupernova, animateSupernova } from '../utils/supernova.js';
 
 export class HubScene {
-  constructor(canvas, onDimensionSelect) {
+  constructor(canvas, onDimensionSelect, onBackToPortal) {
     this.canvas = canvas;
     this.onDimensionSelect = onDimensionSelect;
+    this.onBackToPortal = onBackToPortal;
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(
@@ -30,10 +32,12 @@ export class HubScene {
     this.composer = null;
     this.spheres = [];
     this.starfield = null;
+    this.supernova = null;
     this.time = 0;
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.hoveredSphere = null;
+    this.hoveredSupernova = false;
 
     this.init();
   }
@@ -54,6 +58,10 @@ export class HubScene {
 
     // Creare le 7 sfere
     this.createConstellation();
+
+    // Creare la supernova (stella vibrante per ritorno)
+    this.supernova = createSupernova();
+    this.scene.add(this.supernova);
 
     // Luce ambientale
     const ambientLight = new THREE.AmbientLight(COLORS.frost, 0.3);
@@ -117,30 +125,51 @@ export class HubScene {
     this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    // Raycast
+    // Raycast sulle sfere
     this.raycaster.setFromCamera(this.mouse, this.camera);
-    const intersects = this.raycaster.intersectObjects(this.spheres);
+    const sphereIntersects = this.raycaster.intersectObjects(this.spheres);
 
-    // Reset hover precedente
+    // Raycast sulla supernova
+    const supernovaIntersects = this.supernova ?
+      this.raycaster.intersectObject(this.supernova, true) : [];
+
+    // Reset hover precedente delle sfere
     if (this.hoveredSphere) {
       this.hoveredSphere.scale.setScalar(1);
       this.hideDimensionLabel();
     }
 
-    // Nuovo hover
-    if (intersects.length > 0) {
-      this.hoveredSphere = intersects[0].object;
+    // Check hover supernova (priorità)
+    if (supernovaIntersects.length > 0) {
+      this.hoveredSupernova = true;
+      this.hoveredSphere = null;
+      this.showSupernovaLabel(event);
+      document.body.style.cursor = 'pointer';
+    }
+    // Check hover sfere
+    else if (sphereIntersects.length > 0) {
+      this.hoveredSupernova = false;
+      this.hoveredSphere = sphereIntersects[0].object;
       this.hoveredSphere.scale.setScalar(1.2);
       this.showDimensionLabel(this.hoveredSphere.userData.dimension, event);
       document.body.style.cursor = 'pointer';
-    } else {
+    }
+    // Nessun hover
+    else {
+      this.hoveredSupernova = false;
       this.hoveredSphere = null;
+      this.hideSupernovaLabel();
       document.body.style.cursor = 'default';
     }
   }
 
   onClick() {
-    if (this.hoveredSphere) {
+    // Click su supernova → ritorno al portale
+    if (this.hoveredSupernova) {
+      this.returnToPortal();
+    }
+    // Click su sfera → entra nella sala
+    else if (this.hoveredSphere) {
       const dimension = this.hoveredSphere.userData.dimension;
 
       // Fade out costellazione
@@ -207,6 +236,73 @@ export class HubScene {
     }
   }
 
+  showSupernovaLabel(event) {
+    const hubUI = document.getElementById('hub-ui');
+    let label = document.getElementById('supernova-label');
+
+    if (!label) {
+      label = document.createElement('div');
+      label.id = 'supernova-label';
+      label.className = 'fixed pointer-events-none text-orange-400 text-lg tracking-wider glow-strong';
+      hubUI.appendChild(label);
+    }
+
+    label.textContent = '← Ritorna al Monolite';
+    label.style.left = `${event.clientX + 20}px`;
+    label.style.top = `${event.clientY - 10}px`;
+    label.style.opacity = '1';
+  }
+
+  hideSupernovaLabel() {
+    const label = document.getElementById('supernova-label');
+    if (label) {
+      label.style.opacity = '0';
+    }
+  }
+
+  returnToPortal() {
+    // Fade out hub UI
+    const hubUI = document.getElementById('hub-ui');
+    hubUI.style.opacity = '0';
+
+    // Animazione esplosione supernova
+    if (this.supernova) {
+      const startTime = Date.now();
+      const duration = 800;
+
+      const explode = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+
+        // Espansione + dissoluzione
+        this.supernova.scale.setScalar(1 + eased * 5);
+        this.supernova.material.opacity = 1 - eased;
+        this.supernova.material.transparent = true;
+
+        if (progress < 1) {
+          requestAnimationFrame(explode);
+        }
+      };
+
+      explode();
+    }
+
+    // Dissolvi sfere e campo stellare
+    this.spheres.forEach((sphere, i) => {
+      setTimeout(() => {
+        this.animateSphereDissolve(sphere, 1);
+      }, i * 50);
+    });
+
+    // Callback dopo animazione
+    setTimeout(() => {
+      if (this.onBackToPortal) {
+        this.onBackToPortal();
+      }
+    }, 1000);
+  }
+
   render() {
     this.time += ANIMATION.sphereFloat;
 
@@ -220,6 +316,11 @@ export class HubScene {
     // Animazione campo stellare (rotazione lenta)
     if (this.starfield) {
       animateStarfield(this.starfield, 1);
+    }
+
+    // Animazione supernova (pulsazione vibrante)
+    if (this.supernova) {
+      animateSupernova(this.supernova, this.time);
     }
 
     this.composer.render();
