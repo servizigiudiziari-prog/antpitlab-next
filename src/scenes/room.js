@@ -4,6 +4,7 @@
  */
 
 import { DIMENSIONS } from '../data/dimensions.js';
+import { createScritturaContent, initScritturaTabs } from '../components/scrittura.js';
 
 export class RoomManager {
   constructor(onBackToHub) {
@@ -78,16 +79,60 @@ export class RoomManager {
 
   loadDimension(index) {
     const dimension = DIMENSIONS[index];
+    const roomContainer = this.roomUI.querySelector('.relative.w-full');
 
-    this.roomTitle.textContent = dimension.name;
-    this.roomDescription.textContent = dimension.description;
+    // Contenuto custom per dimensione specifica
+    if (dimension.id === 'scrittura') {
+      this.loadScritturaRoom(roomContainer);
+    } else {
+      this.loadGenericRoom(dimension, roomContainer);
+    }
+  }
 
-    // Colore dinamico del gradiente
+  loadScritturaRoom(container) {
+    // Stile letterario con texture carta
+    container.style.background = `
+      linear-gradient(135deg, #1a1410 0%, #2d1810 100%),
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(120, 80, 40, 0.03) 2px, rgba(120, 80, 40, 0.03) 4px)
+    `;
+    container.style.backgroundBlendMode = 'multiply';
+
+    // Carica contenuto letterario
+    const content = document.getElementById('room-content');
+    content.innerHTML = createScritturaContent();
+
+    // Inizializza tabs e interazioni
+    setTimeout(() => {
+      initScritturaTabs();
+    }, 100);
+
+    // Nascondi frecce navigazione (non servono in questa sala)
+    document.getElementById('room-prev').style.display = 'none';
+    document.getElementById('room-next').style.display = 'none';
+  }
+
+  loadGenericRoom(dimension, container) {
+    // Ripristina frecce navigazione
+    document.getElementById('room-prev').style.display = 'flex';
+    document.getElementById('room-next').style.display = 'flex';
+
+    // Stile cosmico generico
     const color = `#${dimension.color.toString(16).padStart(6, '0')}`;
-    this.roomUI.querySelector('.relative.w-full').style.background = `linear-gradient(135deg, #0a0a12 0%, ${color}22 100%)`;
+    container.style.background = `linear-gradient(135deg, #0a0a12 0%, ${color}22 100%)`;
 
-    // Placeholder immagine (puoi aggiungere immagini reali in futuro)
-    this.roomImage.innerHTML = `<span class="text-cosmic-steel text-sm">[ ${dimension.name.toLowerCase()} — visuale in arrivo ]</span>`;
+    // Contenuto generico
+    const content = document.getElementById('room-content');
+    content.innerHTML = `
+      <div class="relative h-full flex flex-col justify-between p-12 text-cosmic-frost">
+        <div class="flex-1 flex flex-col justify-center">
+          <h1 class="text-5xl font-light mb-6 tracking-wide">${dimension.name}</h1>
+          <p class="text-xl leading-relaxed opacity-80 max-w-2xl">${dimension.description}</p>
+        </div>
+        <div class="mt-8 w-full h-64 bg-cosmic-steel/20 rounded flex items-center justify-center">
+          <span class="text-cosmic-steel text-sm">[ ${dimension.name.toLowerCase()} — contenuto in arrivo ]</span>
+        </div>
+      </div>
+    `;
   }
 
   exitRoom() {
