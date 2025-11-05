@@ -28,7 +28,7 @@ export const DIMENSIONS = [
     id: 'scrittura',
     name: 'Scrittura',
     description: 'Tracce di senso — parole che tessono il reale. Scrivere è dare forma al caos, ordinare il flusso dell\'esperienza in strutture di significato.',
-    color: 0x1abc9c,
+    color: 0xcd853f, // Marrone dorato (coordinato con UI letteraria)
     position: { x: 6, y: -3, z: -2 }
   },
   {

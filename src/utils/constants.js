@@ -11,12 +11,12 @@ export const COLORS = {
   light: 0xe8eaf6,
 };
 
-// Palette per le 7 sfere (spettro armonico freddo)
+// Palette per le 7 sfere (spettro armonico con accenti caldi)
 export const SPHERE_COLORS = [
   0x4a90e2, // Blu profondo - Fotografia
   0x9b59b6, // Viola cosmico - Musica
   0x3498db, // Azzurro elettrico - Coding
-  0x1abc9c, // Turchese - Scrittura
+  0xcd853f, // Marrone dorato - Scrittura (coordinato con UI letteraria)
   0x34495e, // Grigio metallico - Diritto & Aste
   0x95a5a6, // Argento - Filosofia
   0xe74c3c  // Rosso profondo - Innovazione/AI
