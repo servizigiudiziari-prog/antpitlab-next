@@ -227,11 +227,20 @@ export function initScritturaTabs() {
     });
   });
 
-  // Admin lock click
+  // Admin lock click - Apre Sanity Studio
   const adminLock = document.getElementById('admin-lock');
   if (adminLock) {
     adminLock.addEventListener('click', () => {
-      alert('🔒 Backend Sanity CMS\n\nVerrà configurato nel prossimo step.\nPotrai caricare copertine, contenuti e gestire tutto da qui.');
+      // Prova prima lo studio deployed, poi quello locale
+      const studioUrl = import.meta.env.VITE_SANITY_STUDIO_URL || 'http://localhost:3333';
+
+      window.open(studioUrl, '_blank');
+
+      // Messaggio informativo
+      setTimeout(() => {
+        console.log('🔒 Sanity Studio aperto in una nuova finestra');
+        console.log('Se non si apre, vai manualmente su:', studioUrl);
+      }, 100);
     });
   }
 }
