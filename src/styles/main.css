@@ -1,0 +1,53 @@
+/* Import font letterari */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
+
+  body {
+    @apply font-cosmic bg-cosmic-void text-cosmic-light antialiased;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  canvas {
+    display: block;
+  }
+
+  .font-serif {
+    font-family: 'Crimson Text', Georgia, serif;
+  }
+}
+
+@layer utilities {
+  .glow {
+    text-shadow: 0 0 20px rgba(184, 193, 217, 0.5);
+  }
+
+  .glow-strong {
+    text-shadow: 0 0 30px rgba(184, 193, 217, 0.8);
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-amber-800/30 rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-amber-700/50;
+  }
+}
